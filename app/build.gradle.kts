@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.ksp)
 }
 
 android {
@@ -53,8 +54,13 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.activity.compose)
     implementation(libs.koin)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.paging.compose)
     implementation(libs.paging3)
     implementation(libs.bumptech.glide)
+    implementation(libs.glide.compose)
+    ksp(libs.glide.annotation)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
@@ -67,4 +73,7 @@ dependencies {
     implementation(libs.squareup.retrofit)
     implementation(libs.gson)
     implementation(libs.squareup.okhttp.logging)
+    implementation(libs.room)
+    implementation(libs.room.paging)
+    ksp(libs.room.compiler)
 }
