@@ -29,6 +29,7 @@ import com.transact.assessment.domain.model.Filter
 import com.transact.assessment.domain.model.ImageInfo
 import com.transact.assessment.ui.common.DropDownSelectorView
 import com.transact.assessment.ui.common.ErrorView
+import com.transact.assessment.util.rememberLazyListState
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -72,8 +73,9 @@ private fun ImageListingView(
     selectedFilter: String?,
     onItemSelected: (Filter?) -> Unit,
 ) {
-    Column {
+    val listState = images.rememberLazyListState()
 
+    Column {
         Row (
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -102,7 +104,8 @@ private fun ImageListingView(
         LazyColumn (
             modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
-            contentPadding = PaddingValues(horizontal = 8.dp)
+            contentPadding = PaddingValues(horizontal = 8.dp),
+            state = listState
         ) {
             items(count = images.itemCount) { index ->
                 ImageItemView(images[index])
