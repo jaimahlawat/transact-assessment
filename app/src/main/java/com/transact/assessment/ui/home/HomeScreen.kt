@@ -52,7 +52,7 @@ fun HomeScreen(
 }
 
 @Composable
-private fun ImageListingView(
+fun ImageListingView(
     images: LazyPagingItems<ImageInfo>,
     filters: List<Filter>,
     selectedFilter: String?,
