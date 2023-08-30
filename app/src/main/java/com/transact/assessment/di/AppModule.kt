@@ -1,8 +1,8 @@
 package com.transact.assessment.di
 
 import androidx.room.Room
-import com.transact.assessment.BuildConfig
 import com.google.gson.GsonBuilder
+import com.transact.assessment.BuildConfig
 import com.transact.assessment.common.Constants
 import com.transact.assessment.common.Constants.BASE_URL
 import com.transact.assessment.data.local.ImageDatabase
