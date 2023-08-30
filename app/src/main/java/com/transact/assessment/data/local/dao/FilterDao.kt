@@ -7,7 +7,7 @@ import com.transact.assessment.data.local.entity.FilterEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface FilterDAO {
+interface FilterDao {
     @Query("SELECT * FROM filters")
     fun getFilters(): Flow<List<FilterEntity>>
 

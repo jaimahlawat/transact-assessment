@@ -1,6 +1,6 @@
 package com.transact.assessment.data.remote
 
-import com.transact.assessment.data.remote.dto.ImageInfoDTO
+import com.transact.assessment.data.remote.dto.ImageInfoDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -10,5 +10,5 @@ interface ApiService {
     suspend fun getImages(
         @Query("page") page: Int,
         @Query("limit") limit: Int,
-    ): List<ImageInfoDTO>
+    ): List<ImageInfoDto>
 }
