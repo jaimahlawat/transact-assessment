@@ -23,6 +23,10 @@ class ImageRemoteMediator(
     private val filterDAO = imageDatabase.filterDAO()
     private val remoteKeysDao = imageDatabase.remoteKeysDao()
 
+    override suspend fun initialize(): InitializeAction {
+        return InitializeAction.LAUNCH_INITIAL_REFRESH
+    }
+
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, ImageInfoEntity>

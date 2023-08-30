@@ -17,6 +17,7 @@ import com.transact.assessment.R
 @Composable
 fun ErrorView(
     modifier: Modifier = Modifier,
+    message: String = "",
     onRetryClick: () -> Unit,
 ) {
     Column (
@@ -24,7 +25,7 @@ fun ErrorView(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = stringResource(id = R.string.error_something_went_wrong))
+        Text(text = message)
 
         Spacer(modifier = Modifier.height(10.dp))
 

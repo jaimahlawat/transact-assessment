@@ -6,13 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,6 +24,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.transact.assessment.R
 import com.transact.assessment.domain.model.Filter
 import com.transact.assessment.domain.model.ImageInfo
+import com.transact.assessment.ui.component.CircularProgressIndicatorView
 import com.transact.assessment.ui.component.DropDownSelectorView
 import com.transact.assessment.ui.component.EmptyView
 import com.transact.assessment.ui.component.ErrorView
@@ -42,28 +40,14 @@ fun HomeScreen(
     val selectedFilter by viewModel.selectedFilter.collectAsStateWithLifecycle()
 
     Box (modifier = Modifier.fillMaxSize()){
-        when (images.loadState.refresh) {
-            is LoadState.Error -> {
-                ErrorView(modifier = Modifier.fillMaxSize()) {
-                    images.retry()
-                }
+        ImageListingView (
+            images = images,
+            filters = filters,
+            selectedFilter = selectedFilter,
+            onItemSelected = {
+                viewModel.updateFilter(it)
             }
-            LoadState.Loading -> {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-            is LoadState.NotLoading -> {
-                ImageListingView (
-                    images = images,
-                    filters = filters,
-                    selectedFilter = selectedFilter,
-                    onItemSelected = {
-                        viewModel.updateFilter(it)
-                    }
-                )
-            }
-        }
+        )
     }
 }
 
@@ -108,37 +92,43 @@ private fun ImageListingView(
             contentPadding = PaddingValues(horizontal = 8.dp),
             state = listState
         ) {
-            if (images.itemCount == 0) {
-                item {
-                    EmptyView(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                    )
-                }
-            } else {
-                items(count = images.itemCount) { index ->
-                    ImageItemView(images[index])
-                }
-
-                if (images.loadState.append is LoadState.Loading) {
-                    item {
-                        CircularProgressIndicator(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentWidth(Alignment.CenterHorizontally)
+            images.apply {
+                when {
+                    loadState.refresh is LoadState.Loading -> item {
+                        CircularProgressIndicatorView(
+                            modifier = Modifier.fillParentMaxSize()
                         )
                     }
-                } else if(images.loadState.append is LoadState.Error) {
-                    item {
-                        ErrorView(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight()
-                        ) {
-                            images.retry()
+
+                    loadState.mediator?.refresh is LoadState.Error && images.itemCount == 0 -> {
+                        item {
+                            ErrorView(
+                                message = stringResource(id = R.string.error_something_went_wrong),
+                                modifier = Modifier
+                                    .fillParentMaxSize()
+                                    .padding(10.dp),
+                                onRetryClick = { retry() }
+                            )
                         }
                     }
+
+                    loadState.refresh is LoadState.NotLoading && images.itemCount == 0 -> {
+                        item {
+                            EmptyView(
+                                modifier = Modifier
+                                    .fillParentMaxSize()
+                                    .padding(10.dp)
+                            )
+                        }
+                    }
+
+                    loadState.source.refresh is LoadState.NotLoading ||
+                            loadState.mediator?.refresh is LoadState.NotLoading -> {
+                        items(count = images.itemCount) { index ->
+                            ImageItemView(images[index])
+                        }
+                    }
+
                 }
             }
         }
