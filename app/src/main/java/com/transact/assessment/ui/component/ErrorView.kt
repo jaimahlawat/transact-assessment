@@ -1,4 +1,4 @@
-package com.transact.assessment.ui.common
+package com.transact.assessment.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

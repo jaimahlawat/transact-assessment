@@ -27,8 +27,9 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.transact.assessment.R
 import com.transact.assessment.domain.model.Filter
 import com.transact.assessment.domain.model.ImageInfo
-import com.transact.assessment.ui.common.DropDownSelectorView
-import com.transact.assessment.ui.common.ErrorView
+import com.transact.assessment.ui.component.DropDownSelectorView
+import com.transact.assessment.ui.component.EmptyView
+import com.transact.assessment.ui.component.ErrorView
 import com.transact.assessment.util.rememberLazyListState
 import org.koin.androidx.compose.getViewModel
 
@@ -107,26 +108,36 @@ private fun ImageListingView(
             contentPadding = PaddingValues(horizontal = 8.dp),
             state = listState
         ) {
-            items(count = images.itemCount) { index ->
-                ImageItemView(images[index])
-            }
-
-            if (images.loadState.append is LoadState.Loading) {
+            if (images.itemCount == 0) {
                 item {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentWidth(Alignment.CenterHorizontally)
-                    )
-                }
-            } else if(images.loadState.append is LoadState.Error) {
-                item {
-                    ErrorView(
+                    EmptyView(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight()
-                    ) {
-                        images.retry()
+                    )
+                }
+            } else {
+                items(count = images.itemCount) { index ->
+                    ImageItemView(images[index])
+                }
+
+                if (images.loadState.append is LoadState.Loading) {
+                    item {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentWidth(Alignment.CenterHorizontally)
+                        )
+                    }
+                } else if(images.loadState.append is LoadState.Error) {
+                    item {
+                        ErrorView(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                        ) {
+                            images.retry()
+                        }
                     }
                 }
             }

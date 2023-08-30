@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
-package com.transact.assessment.ui.common
+package com.transact.assessment.ui.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column

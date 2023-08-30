@@ -9,7 +9,7 @@ import com.transact.assessment.data.local.entity.ImageInfoEntity
 @Dao
 interface ImageInfoDao {
     @Query("SELECT * FROM images")
-    fun pagingSource(): PagingSource<Int, ImageInfoEntity>
+    fun getAllImages(): PagingSource<Int, ImageInfoEntity>
 
     @Query("SELECT * FROM images WHERE author IS :query")
     fun getImagesByAuthor(query: String): PagingSource<Int, ImageInfoEntity>

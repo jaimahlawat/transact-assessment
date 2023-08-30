@@ -34,7 +34,7 @@ class ImageRepositoryImpl(
         ),
         pagingSourceFactory = {
             if (query.isNullOrEmpty()) {
-                imageDatabase.imageInfoDAO().pagingSource()
+                imageDatabase.imageInfoDAO().getAllImages()
             } else {
                 imageDatabase.imageInfoDAO().getImagesByAuthor(query)
             }

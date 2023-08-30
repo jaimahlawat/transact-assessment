@@ -4,4 +4,5 @@
     <string name="button_text_retry">Retry</string>
     <string name="text_filter_by_author">Filter by Author</string>
     <string name="text_clear_filter">Clear</string>
+    <string name="text_no_data_found">Sorry! No data found.</string>
 </resources>
