@@ -77,4 +77,7 @@ dependencies {
     implementation(libs.room)
     implementation(libs.room.paging)
     ksp(libs.room.compiler)
+
+    androidTestImplementation(libs.compose.ui.test)
+    debugImplementation(libs.compose.ui.test.manifest)
 }
