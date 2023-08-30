@@ -1,7 +1,7 @@
 package com.transact.assessment.data.remote.dto
 
 data class ImageInfoDTO(
-    val id: String? = null,
+    val id: String,
     val author: String? = null,
     val width: Int = 0,
     val height: Int = 0,

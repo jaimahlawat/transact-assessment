@@ -1,4 +1,4 @@
-package com.transact.assessment.data.mappers
+package com.transact.assessment.data.mapper
 
 import com.transact.assessment.data.local.entity.ImageInfoEntity
 import com.transact.assessment.data.remote.dto.ImageInfoDTO
@@ -14,10 +14,6 @@ fun ImageInfoDTO.toImageInfoEntity() = ImageInfoEntity(
 )
 
 fun ImageInfoEntity.toDomain() = ImageInfo(
-    id = id,
     author = author,
-    width = width,
-    height = height,
-    url = url,
     downloadUrl = downloadUrl
 )

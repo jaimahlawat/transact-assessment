@@ -2,22 +2,63 @@ package com.transact.assessment.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import androidx.paging.map
-import com.transact.assessment.data.mappers.toDomain
-import com.transact.assessment.domain.model.ImageRepository
+import com.transact.assessment.data.mapper.toDomain
+import com.transact.assessment.domain.model.Filter
+import com.transact.assessment.domain.model.ImageInfo
+import com.transact.assessment.domain.repository.ImageRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class HomeScreenViewModel(
-    imageRepository: ImageRepository
+    private val imageRepository: ImageRepository
 ): ViewModel() {
 
-    val imageList = imageRepository
-        .getImages()
-        .map { pagingData ->
-            pagingData.map { imageInfoEntity ->
-                imageInfoEntity.toDomain()
-            }
-        }.cachedIn(viewModelScope)
+    val selectedFilter = imageRepository
+        .selectedFilter
+        .map {
+            it?.name
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = null
+        )
 
+    val imageList = selectedFilter.flatMapLatest { filterString ->
+        imageRepository
+            .getImages(filterString)
+            .map { pagingData ->
+                pagingData.map { imageInfoEntity ->
+                    imageInfoEntity.toDomain()
+                }
+            }
+    }.cachedIn(viewModelScope)
+
+    val filters = imageRepository
+        .filters
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+
+    fun updateFilter(filter: Filter?) {
+        viewModelScope.launch {
+            imageRepository.updateFilter(filter)
+        }
+    }
 }

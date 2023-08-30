@@ -11,6 +11,9 @@ interface ImageInfoDao {
     @Query("SELECT * FROM images")
     fun pagingSource(): PagingSource<Int, ImageInfoEntity>
 
+    @Query("SELECT * FROM images WHERE author IS :query")
+    fun getImagesByAuthor(query: String): PagingSource<Int, ImageInfoEntity>
+
     @Upsert
     suspend fun upsertAll(item: List<ImageInfoEntity>)
 

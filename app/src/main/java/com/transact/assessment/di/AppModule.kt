@@ -1,17 +1,17 @@
 package com.transact.assessment.di
 
 import androidx.room.Room
+import com.transact.assessment.BuildConfig
 import com.google.gson.GsonBuilder
 import com.transact.assessment.common.Constants
 import com.transact.assessment.common.Constants.BASE_URL
 import com.transact.assessment.data.local.ImageDatabase
 import com.transact.assessment.data.remote.ApiService
 import com.transact.assessment.data.repository.ImageRepositoryImpl
-import com.transact.assessment.domain.model.ImageRepository
+import com.transact.assessment.domain.repository.ImageRepository
 import com.transact.assessment.ui.home.HomeScreenViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.android.BuildConfig
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.bind
@@ -25,9 +25,9 @@ val networkModule = module {
         if (BuildConfig.DEBUG) {
             val interceptor = HttpLoggingInterceptor()
             interceptor.level = HttpLoggingInterceptor.Level.BODY
-            OkHttpClient.Builder().addNetworkInterceptor(interceptor).build()
+            OkHttpClient().newBuilder().addInterceptor(interceptor).build()
         } else {
-            OkHttpClient.Builder().build()
+            OkHttpClient().newBuilder().build()
         }
     }
 
